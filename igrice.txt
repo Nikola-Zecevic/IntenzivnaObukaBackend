@@ -1,0 +1,10 @@
+GTA 5;9.50;2013;Rockstar;Action Crime
+The Witcher 3;9.80;2015;CD Projekt;RPG Adventure
+League of Legends;8.70;2009;Riot Games;MOBA Strategy
+FIFA 21;7.20;2020;EA Sports;Sports Simulation
+Minecraft;9.40;2011;Mojang;Adventure Simulation
+Counter Strike;8.90;2000;Valve;Action Strategy
+Civilization VI;8.30;2016;2K Games;Strategy Simulation
+Cyberpunk 2077;7.50;2020;CD Projekt;RPG Action
+Among Us;7.00;2018;Innersloth;Strategy Simulation
+Dota 2;8.60;2013;Valve;MOBA Strategy

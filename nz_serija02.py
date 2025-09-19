@@ -1,4 +1,3 @@
-
 def odnos(ob):
     return ob.get("br_pozitivni")/ob.get("br_negativni")
 
@@ -7,7 +6,7 @@ def najgori_odnos(li):
     for item in li:
         if odnos(item)<odnos(najgori):
             najgori=item
-    return najgori
+    return najgori["naziv"]
 # a=[{"naziv":"Español para principiantes", "br_pozitivni":1000,"br_negativni":10},
 # {"naziv":"Philophize This!", "br_pozitivni":500,"br_negativni": 30}, {"naziv":"Science VS. ",
 # "br_pozitivni":600,"br_negativni": 45}]
@@ -16,35 +15,99 @@ def najgori_odnos(li):
 
 
 """
-Potrebno je implementirati jednostavnu biblioteku za upravljanje knjigama u programskom jeziku
-Python. Biblioteka treba omogućiti dodavanje, pregled, uređivanje i brisanje knjiga iz inventara.
-Potrebno je kreirati klasu Book i klasu Library.
-● Svaka knjiga ima sledeće atribute: naslov, autor, godina izdanja i broj kopija u inventaru.
-● Implementirati konstruktor klase Book koji će inicijalizovati atribute knjige. Implementirati
-metode za dohvatanje i postavljanje svakog atributa knjige (geteri i seteri).
-● Biblioteka (Library) treba da sadrži listu knjiga koje su dostupne u inventaru.
-Implementirati metode za dodavanje knjige u inventar (Book objekat), brisanje knjige iz
-inventara (po naslovu), pretragu knjiga po naslovu ili autoru i prikaz svih knjiga koje su
-trenutno dostupne (naslov, autor i godina izdanja).
+
 ● Napisati glavni program koji koristi klasu Library za upravljanje inventarom knjiga.
 Korisnik treba da može da izabere opcije za dodavanje, pregled, uređivanje i brisanje
 knjiga iz biblioteke. Prilikom dodavanja knjige, program treba da omogući unos svih
 potrebnih informacija o knjizi. Prilikom uređivanja knjige, korisnik treba da može da
-izmeni bilo koji atribut knjige (naslov, autor, godina izdanja, broj kopija). Prilikom brisanja
-knjige, program treba da ukloni knjigu iz inventara na osnovu naslova knjige. Prilikom
-pretrage po naslovu ili autoru, program treba da prikaže sve knjige koje zadovoljavaju
-kriterijum pretrage.
+izmeni bilo koji atribut knjige (naslov, autor, godina izdanja, broj kopija).
 """
 class Book:
-    def __init__(self, title,author,year,copy_number):
-        self.title=title
-        self.author=author
-        self.year=year
-        self.copy_number=copy_number
+    def __init__(self, title, author, year, number_of_copies):
+        self._title=title
+        self._author=author
+        self._year=year
+        self._number_of_copies=number_of_copies
+
+    def __str__(self):
+        return f"{self._title} | {self._author} | {self._year}"# | Kopija: {self._number_of_copies}"
+
+
+    @property
+    def title(self):
+        return self._title
     
 
+    @title.setter
+    def title(self, new_title):
+        if not isinstance(new_title, str) or not new_title:
+            raise ValueError("Title must be a non-empty string.")
+        self._title = new_title
 
+
+    @property
+    def author(self):
+        return self._author
+
+
+    @author.setter
+    def author(self, new_author):
+        if not isinstance(new_author, str) or not new_author:
+            raise ValueError("Title must be a non-empty string.")
+        self._author = new_author 
+    
+
+    @property
+    def year(self):
+        return self._year
+    
+
+    @year.setter
+    def year(self, new_year):
+        if not isinstance(new_year, int) or not new_year:
+            raise ValueError("Year must be integer.")
+        self._year = new_year
+
+    
+    @property
+    def number_of_copies(self):
+        return self._number_of_copies
+    
+
+    @number_of_copies.setter
+    def number_of_copies(self, new_number_of_copies):
+        if not isinstance(new_number_of_copies, int) or not new_number_of_copies:
+            raise ValueError("Number of copies must be integer.")
+        self._number_of_copies=new_number_of_copies
+
+
+class Library:
+    def __init__(self, book_list=[]):
+        self._book_list=book_list
+    
+
+    def add_book(self, book):
+        if not isinstance(book, Book) or not book:
+            raise ValueError("Only books can be added to the library!")
+        self._book_list.append(book)
+
+    def delete_book(self, title):
+        self._book_list = [book for book in self._book_list if book.title != title]
+
+    def find_book(self, title):
+        found=[book for book in self._book_list if book.title == title]
+        return found
         
+    
+    def find_by_author(self, author):
+        found=[book for book in self._book_list if book.author == author]
+        return found
+    
+    def display(self):
+        if not self._book_list:
+            print("Library empty")
+        for book in self._book_list:
+            print(book)
 
 
 """Potrebno je da kreirate klasu Company koja ima 5 atributa: name (ime kompanije, string), area
@@ -52,12 +115,8 @@ class Book:
 {“name”: “some_string”, “surname”:”some_string”, “salary”:”num” }) i balance (trenutni finansijskih
 balans kompanije, float number), max_num_of_employees (prirodan broj koji predstavlja koliko
 zaposlenih kompanija može maksimalno da ima).
-● Potrebno je kreirati konstruktor kojim se definišu vrijednosti svih atributa na zadate
-vrijednosti. Pretpostavlja se da korisnik unosi ispravno informacije (ne treba raditi
-validaciju). Vrijednost atributa employees je prazna lista []. Svi atributi su privatni.
-● Potrebno je kreirati odgovarajuće getere i setere za sve atribute osim za atribut
-employees. Pri postavljanju vrijednosti atributa balance i max_num_of_employees
-onemogućiti postavljanje na vrijednosti koje su manje od 0.
+
+
 ● Kreirati metod add_employee sa jednim parametrom employee koji dodaje novog
 zaposlenog u kompaniju. Zaposleni se upisuje u atribut employees kao dictionary gore
 navedenog oblika (pomoć: samo je potrebno odraditi dodavanje employee argumenta,
@@ -79,12 +138,53 @@ kaže da je veća od kompanije B ako kompanija A ima više zaposlenih nego kompa
 implementirali."""
 
 class Company:
-    def __init__(self,name,area,employees,balance, max_num_of_employees):
-        self.name=name
-        self.area=area
-        self.employees=employees
-        self.balance=balance
-        self.max_num_of_employees=max_num_of_employees
+    def __init__(self, name, area, balance, max_num_of_employees):
+        self._name=name
+        self._area=area
+        self._employees=[]
+        self._balance=balance
+        self._max_num_of_employees=max_num_of_employees
+
+
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self,new_name):
+        self._name=new_name
+
+    @property
+    def area(self):
+        return self._area
+    
+    @name.setter
+    def area(self,new_area):
+        self._area=new_area
+
+    @property
+    def balance(self):
+        return self.balance
+    
+    @name.setter
+    def balance(self,new_balance):
+        if new_balance<0:
+            raise ValueError("Balance must be positive!")
+        else:
+            self._balance=new_balance
+        
+
+    @property
+    def max_num_of_employees(self):
+        return self._max_num_of_employees
+    
+    @name.setter
+    def max_num_of_employees(self,new_max_num_of_employees):
+        if new_max_num_of_employees<0:
+            raise ValueError("Number of employees must be positive!")
+        else :
+            self._max_num_of_employees=new_max_num_of_employees  
+
 
     def add_employee(self, employee):
         if self.max_num_of_employees>len(self.employees):
